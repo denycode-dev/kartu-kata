@@ -17,14 +17,19 @@
     backdrop-filter: blur(24px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+                box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateZ(0);
+    will-change: transform;
   }
 
   .glass-card:hover {
     background-color: rgba(255, 255, 255, 0.1);
     border-color: rgba(255, 255, 255, 0.3);
     box-shadow: 0 15px 50px 0 rgba(0, 0, 0, 0.5);
-    transform: translateY(-5px) scale(1.02);
+    transform: translateY(-5px) scale(1.02) translateZ(0);
   }
 
   .text-gradient {
@@ -53,6 +58,27 @@
   .bg-gradient-couples {
     background-image: linear-gradient(135deg, #f472b6 0%, #fb7185 100%);
   }
+
+  /* Performance optimizations */
+  .preserve-3d {
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .backface-hidden {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .gpu-accelerate {
+    transform: translateZ(0);
+    will-change: transform;
+  }
 }
 
 @layer base {
@@ -62,5 +88,16 @@
     font-feature-settings: "rlig" 1, "calt" 1;
     background-image: radial-gradient(circle at 50% 0%, #2e1065 0%, #000000 100%);
     min-height: 100vh;
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }

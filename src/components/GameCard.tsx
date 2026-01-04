@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, Sparkles, MessageCircleHeart, Users } from "lucide-react";
-import { generateQuestion } from "@/lib/gemini";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { Sparkles, MessageCircleHeart, Users } from "lucide-react";
+import { generateQuestion } from "@/lib/questions";
 import { cn } from "@/lib/utils";
 
 interface GameCardProps {
@@ -15,23 +15,23 @@ export default function GameCard({ mode, onBack }: GameCardProps) {
     const [isFlipped, setIsFlipped] = useState(false);
     const [question, setQuestion] = useState<string>("");
     const [loading, setLoading] = useState(false);
+    const shouldReduceMotion = useReducedMotion();
 
     const handleCardClick = async () => {
         if (loading) return;
 
+        // First click: flip the card
         if (!isFlipped) {
             setIsFlipped(true);
+            const q = await generateQuestion(mode);
+            setQuestion(q);
+        } else {
+            // Get new question with card animation (no flip back)
             setLoading(true);
             const q = await generateQuestion(mode);
             setQuestion(q);
             setLoading(false);
         }
-    };
-
-    const handleReset = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        setIsFlipped(false);
-        setQuestion("");
     };
 
     const isFriends = mode === "friends";
@@ -54,9 +54,15 @@ export default function GameCard({ mode, onBack }: GameCardProps) {
                 <motion.div
                     initial={false}
                     animate={{ rotateY: isFlipped ? 180 : 0 }}
-                    transition={{ duration: 0.6, type: "spring", stiffness: 260, damping: 20 }}
+                    transition={shouldReduceMotion 
+                        ? { duration: 0.01 } 
+                        : { duration: 0.5, type: "spring", stiffness: 200, damping: 25 }
+                    }
                     className="w-full h-full preserve-3d relative"
-                    style={{ transformStyle: "preserve-3d" }}
+                    style={{ 
+                        transformStyle: "preserve-3d",
+                        willChange: isFlipped ? "transform" : "auto"
+                    }}
                 >
                     {/* FRONT (Face Down) */}
                     <div
@@ -102,17 +108,31 @@ export default function GameCard({ mode, onBack }: GameCardProps) {
                                 isFriends ? "bg-lime-500" : "bg-pink-500"
                             )} />
 
-                            {loading ? (
-                                <div className="flex flex-col items-center gap-4 z-10">
-                                    <div className={cn("p-4 rounded-full bg-white/5", isFriends ? "text-lime-400" : "text-pink-400")}>
-                                        <Loader2 className="w-10 h-10 animate-spin" />
-                                    </div>
-                                    <p className="text-white/80 font-medium animate-pulse">Meracik pertanyaan...</p>
-                                </div>
-                            ) : (
+                            <AnimatePresence mode="wait">
                                 <motion.div
-                                    initial={{ opacity: 0, scale: 0.9 }}
-                                    animate={{ opacity: 1, scale: 1 }}
+                                    key={question}
+                                    initial={{ 
+                                        opacity: 0, 
+                                        y: shouldReduceMotion ? 0 : 50,
+                                        scale: shouldReduceMotion ? 1 : 0.95
+                                    }}
+                                    animate={{ 
+                                        opacity: 1, 
+                                        y: 0,
+                                        scale: 1
+                                    }}
+                                    exit={{ 
+                                        opacity: 0, 
+                                        y: shouldReduceMotion ? 0 : -50,
+                                        scale: shouldReduceMotion ? 1 : 0.95
+                                    }}
+                                    transition={shouldReduceMotion 
+                                        ? { duration: 0.01 } 
+                                        : { 
+                                            duration: 0.4,
+                                            ease: [0.4, 0, 0.2, 1]
+                                        }
+                                    }
                                     className="z-10 flex flex-col h-full justify-between py-4"
                                 >
                                     <Sparkles className={cn(
@@ -125,24 +145,12 @@ export default function GameCard({ mode, onBack }: GameCardProps) {
                                             "{question}"
                                         </p>
                                     </div>
-
-                                    <button
-                                        onClick={handleReset}
-                                        className={cn(
-                                            "px-6 py-2.5 rounded-full text-white font-bold tracking-wide shadow-lg hover:shadow-xl transition-all active:scale-95 text-sm uppercase",
-                                            isFriends ? "bg-gradient-friends text-black" : "bg-gradient-couples"
-                                        )}
-                                    >
-                                        Pertanyaan Lain
-                                    </button>
                                 </motion.div>
-                            )}
+                            </AnimatePresence>
                         </div>
                     </div>
                 </motion.div>
             </div>
-
-            <p className="text-white/30 text-xs">Powered by Gemini AI</p>
         </div>
     );
 }

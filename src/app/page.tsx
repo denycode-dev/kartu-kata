@@ -1,13 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback, useMemo } from "react";
 import Image from "next/image";
 import GameCard from "@/components/GameCard";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Users, Heart } from "lucide-react";
 
 export default function Home() {
   const [gameMode, setGameMode] = useState<"friends" | "couples" | null>(null);
+  const shouldReduceMotion = useReducedMotion();
+
+  const handleModeSelect = useCallback((mode: "friends" | "couples") => {
+    setGameMode(mode);
+  }, []);
+
+  const handleBackToLanding = useCallback(() => {
+    setGameMode(null);
+  }, []);
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden">
@@ -20,9 +29,13 @@ export default function Home() {
         {!gameMode ? (
           <motion.div
             key="landing"
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 1.1, filter: "blur(10px)" }}
+            exit={shouldReduceMotion 
+              ? { opacity: 0 } 
+              : { opacity: 0, scale: 1.1, filter: "blur(10px)" }
+            }
+            transition={shouldReduceMotion ? { duration: 0.01 } : { duration: 0.3 }}
             className="z-10 flex flex-col items-center gap-12 w-full max-w-2xl text-center"
           >
             <div className="space-y-4">
@@ -36,7 +49,7 @@ export default function Home() {
 
             <div className="grid grid-cols-2 gap-4 w-full px-4 max-w-4xl">
               <button
-                onClick={() => setGameMode("friends")}
+                onClick={() => handleModeSelect("friends")}
                 className="group relative h-48 md:h-64 rounded-3xl overflow-hidden glass-card transition-all duration-500 hover:scale-[1.02] active:scale-95"
               >
                 <div className="absolute inset-0 bg-gradient-friends opacity-0 group-hover:opacity-20 transition-opacity duration-500" />
@@ -52,7 +65,7 @@ export default function Home() {
               </button>
 
               <button
-                onClick={() => setGameMode("couples")}
+                onClick={() => handleModeSelect("couples")}
                 className="group relative h-48 md:h-64 rounded-3xl overflow-hidden glass-card transition-all duration-500 hover:scale-[1.02] active:scale-95"
               >
                 <div className="absolute inset-0 bg-gradient-couples opacity-0 group-hover:opacity-20 transition-opacity duration-500" />
@@ -71,12 +84,13 @@ export default function Home() {
         ) : (
           <motion.div
             key="game"
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 50 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 50 }}
+            exit={{ opacity: 0, y: shouldReduceMotion ? 0 : 50 }}
+            transition={shouldReduceMotion ? { duration: 0.01 } : { duration: 0.4 }}
             className="w-full z-10"
           >
-            <GameCard mode={gameMode} onBack={() => setGameMode(null)} />
+            <GameCard mode={gameMode} onBack={handleBackToLanding} />
           </motion.div>
         )}
       </AnimatePresence>
