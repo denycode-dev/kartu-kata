@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+:root {
+  --background: 240 25% 10%;
+  --foreground: 0 0% 100%;
+}
+
+@theme {
+  --color-background: hsl(240 25% 10%);
+  --color-foreground: hsl(0 0% 100%);
+}
+
+/* Custom Utilities using standard CSS to avoid @apply issues in v4 */
+@layer utilities {
+  .glass-card {
+    background-color: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .glass-card:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 15px 50px 0 rgba(0, 0, 0, 0.5);
+    transform: translateY(-5px) scale(1.02);
+  }
+
+  .text-gradient {
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    background-image: linear-gradient(to right, #ffffff, #e2e8f0);
+  }
+
+  .text-friends {
+    color: #a3e635;
+    /* Lime-400 */
+    text-shadow: 0 0 20px rgba(163, 230, 53, 0.5);
+  }
+
+  .text-couples {
+    color: #f472b6;
+    /* Pink-400 */
+    text-shadow: 0 0 20px rgba(244, 114, 182, 0.5);
+  }
+
+  .bg-gradient-friends {
+    background-image: linear-gradient(135deg, #4ade80 0%, #a3e635 100%);
+  }
+
+  .bg-gradient-couples {
+    background-image: linear-gradient(135deg, #f472b6 0%, #fb7185 100%);
+  }
+}
+
+@layer base {
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-feature-settings: "rlig" 1, "calt" 1;
+    background-image: radial-gradient(circle at 50% 0%, #2e1065 0%, #000000 100%);
+    min-height: 100vh;
+  }
+}
