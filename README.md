@@ -1,33 +1,156 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🃏 Kartu Kata
 
-## Getting Started
+Aplikasi web interaktif untuk menghasilkan pertanyaan seru yang membantu mencairkan suasana saat nongkrong dengan teman atau memperdalam hubungan dengan pasangan.
 
-First, run the development server:
+🌐 **Live Demo**: [https://kartu-kata.vercel.app](https://kartu-kata.vercel.app)
+
+## ✨ Fitur
+
+- 🎴 **200+ Pertanyaan Unik** untuk mode Teman dan Pasangan
+- 🎨 **UI Glassmorphism** dengan animasi 3D card flip yang smooth
+- 🔄 **Random Question** setiap kali diklik
+- 📱 **Responsive Design** - Optimal di semua device
+- ⚡ **Performance Optimized** dengan React Compiler dan GPU acceleration
+- ♿ **Accessibility** dengan reduced motion support
+- 🌍 **SEO Optimized** dengan structured data dan metadata lengkap
+
+## 🎯 Mode Permainan
+
+### 👥 Mode Teman
+Pertanyaan santai dan fun untuk:
+- Ice breaker di gathering
+- Nongkrong santai
+- Truth or dare
+- Team building
+
+### 💑 Mode Pasangan
+Pertanyaan deep talk untuk:
+- Date night yang berkesan
+- Memperdalam hubungan
+- Mengenal pasangan lebih dalam
+- Quality time berkualitas
+
+## 🚀 Tech Stack
+
+- **Framework**: Next.js 16 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS v4
+- **Animation**: Framer Motion
+- **Icons**: Lucide React
+- **Deployment**: Vercel
+
+## 🛠️ Installation
 
 ```bash
+# Clone repository
+git clone https://github.com/denycode-dev/kartu-kata.git
+
+# Install dependencies
+cd kartu-kata
+npm install
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Build for production
+npm run build
+
+# Start production server
+npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📁 Project Structure
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+kartu-kata/
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx          # Root layout dengan metadata
+│   │   ├── page.tsx            # Landing page
+│   │   ├── globals.css         # Global styles
+│   │   └── sitemap.ts          # Dynamic sitemap
+│   ├── components/
+│   │   ├── GameCard.tsx        # Card flip component
+│   │   └── StructuredData.tsx  # JSON-LD schema
+│   ├── lib/
+│   │   ├── questions.ts        # Question server actions
+│   │   └── utils.ts            # Utility functions
+│   └── db/
+│       ├── friends.json        # Questions for friends mode
+│       └── couples.json        # Questions for couples mode
+├── public/
+│   ├── manifest.json           # PWA manifest
+│   └── robots.txt              # SEO robots file
+└── package.json
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🎨 Customization
 
-## Learn More
+### Menambah Pertanyaan Baru
 
-To learn more about Next.js, take a look at the following resources:
+1. Buka file JSON yang sesuai di `src/db/`
+2. Tambahkan pertanyaan ke array `questions`
+3. Pertanyaan akan otomatis muncul saat random selection
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```json
+{
+  "questions": [
+    "Pertanyaan baru kamu di sini",
+    "..."
+  ]
+}
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Menambah Mode Baru
+
+1. Update type union di `GameCard.tsx`
+2. Tambahkan button di `page.tsx` dengan gradient unik
+3. Buat file JSON baru di `src/db/`
+4. Update logic di `src/lib/questions.ts`
+
+## 🎭 Animasi
+
+- **Card Flip**: Spring physics dengan stiffness 200, damping 25
+- **Question Transition**: Slide animation dari bawah dengan scale effect
+- **Reduced Motion**: Animasi disederhanakan untuk accessibility
+
+## 🔍 SEO Features
+
+- ✅ Comprehensive metadata (title, description, keywords)
+- ✅ Open Graph tags untuk social sharing
+- ✅ Twitter Card support
+- ✅ Structured Data (JSON-LD) untuk rich snippets
+- ✅ Dynamic sitemap
+- ✅ Robots.txt optimized
+- ✅ PWA manifest
+- ✅ Canonical URLs
+
+## 📊 Performance
+
+- **React Compiler** untuk auto-optimization
+- **GPU Acceleration** untuk smooth animations
+- **CSS optimizations** dengan specific transitions
+- **Reduced motion support** untuk accessibility
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📝 License
+
+MIT License - feel free to use this project for personal or commercial purposes.
+
+## 👨‍💻 Author
+
+**Deni Irawan Nugraha**
+
+- Website: [https://kartu-kata.vercel.app](https://kartu-kata.vercel.app)
+
+## 🙏 Acknowledgments
+
+- Next.js team untuk amazing framework
+- Framer Motion untuk powerful animation library
+- Vercel untuk hosting yang reliable
 
 ## Deploy on Vercel
 

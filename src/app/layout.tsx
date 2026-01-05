@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-
-
-
-
-Sitemap: https://kartu-kata.vercel.app/sitemap.xmlAllow: /import "./globals.css";
+import StructuredData from "@/components/StructuredData";
+import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,7 +38,7 @@ export const metadata: Metadata = {
     siteName: "Kartu Kata",
     images: [
       {
-        url: "/og-image.png",
+        url: "/og-image.svg",
         width: 1200,
         height: 630,
         alt: "Kartu Kata - Conversation Starter Game"
@@ -52,7 +49,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Kartu Kata - Pertanyaan Seru untuk Nongkrong & Deep Talk",
     description: "Temukan topik obrolan seru untuk teman nongkrong atau pertanyaan deep talk untuk pasangan.",
-    images: ["/og-image.png"],
+    images: ["/og-image.svg"],
     creator: "@deniirawan",
   },
   robots: {
@@ -67,8 +64,12 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
+    icon: [
+      { url: "/icon-512.svg", type: "image/svg+xml" }
+    ],
+    apple: [
+      { url: "/icon-512.svg", type: "image/svg+xml" }
+    ],
   },
   manifest: "/manifest.json",
 };
@@ -86,6 +87,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <StructuredData />
         {children}
       </body>
     </html>
